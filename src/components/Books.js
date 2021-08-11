@@ -1,12 +1,39 @@
 
 import React from 'react'
+import { gql, useQuery, useLazyQuery } from '@apollo/client'
+
+//Haku backendiin "library-backend-Osa8"
+const ALL_BOOKS = gql`
+query {
+  allBooks { 
+      title 
+      author
+      published 
+  }
+}
+`
 
 const Books = (props) => {
+
+  //Tehdään haku backendiin
+  const books = useQuery(ALL_BOOKS)
+
+
+  //Kun painetaan muuta kuin "books" -nappia, niin propsina
+  //tulee null ja silloin kirjoja ei renderöidä
   if (!props.show) {
     return null
   }
 
-  const books = []
+  //const books = []
+
+  //Tämä tarvitaan, jos vastausta ei saatu palvelimelta
+  //näyttäisi, että tarvitaan aina, koska muuten ei renderöinyt HTML sivulle
+  if (books.loading) {
+    return <div>loading...</div>
+  }
+
+  console.log('ALL BOOKS', books.data.allBooks)
 
   return (
     <div>
@@ -23,7 +50,7 @@ const Books = (props) => {
               published
             </th>
           </tr>
-          {books.map(a =>
+          {books.data.allBooks.map(a =>
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author}</td>

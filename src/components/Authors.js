@@ -2,6 +2,7 @@ import React from 'react'
 import { gql, useQuery, useLazyQuery } from '@apollo/client'
 
 /*
+//Tämä vain alkutestausta varten, kun testasin frontin ja backendin kommunikointia
 const Authors = ({ authors }) => {
   return (
     <div>
@@ -36,13 +37,14 @@ const Authors = (props) => {
   if (!props.show) {
     return null
   }
-
   
   //Tämä oli alkuperäisessä koodissa, jotta renderöinti
   //onnistui tyhjällä arraylla ennen kyselyn lisäämistä koodiin ks. alla
   //const authors = []
  
 
+  //Tämä tarvitaan, jos vastausta ei saatu palvelimelta
+  //näyttäisi, että tarvitaan aina, koska muuten ei renderöinyt HTML sivulle
     if (authors.loading) {
       return <div>loading...</div>
     }

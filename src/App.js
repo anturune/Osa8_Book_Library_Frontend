@@ -3,7 +3,7 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 //Apollo client määtitellään "index.js" -sivulla
-import { gql, useQuery, useLazyQuery } from '@apollo/client'
+//import { gql, useQuery, useLazyQuery } from '@apollo/client'
 
 /*
 //Tämä kysely luotu, jotta voidaan todeta, että kysely backendiin toimii
@@ -22,10 +22,10 @@ query {
 
 const App = () => {
   const [page, setPage] = useState('authors')
-  //const [getLazyAuthors, result] = useLazyQuery(ALL_AUTHORS)
-  //const [getAuthors, result] = useQuery(ALL_AUTHORS)
+  
 
 /*
+//-----------------------BACKEND-FRONTEND KOMMUNIKOINTI-TESTAAMISTA VARTEN----------------------------
   //Backendin kommunikoinnin testaamiseen liittyvä koodi
   //Tarvitsee kyselyn, joka kommentoitu pois yllä
   const result = useQuery(ALL_AUTHORS)
@@ -67,7 +67,7 @@ const App = () => {
       </div>
     )
   */
-
+//-----------------------BACKEND-FRONTEND KOMMUNIKOINTI-TESTAAMISTA VARTEN----------------------------
 
   return (
     <div>
