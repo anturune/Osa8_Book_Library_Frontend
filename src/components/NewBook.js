@@ -1,4 +1,24 @@
 import React, { useState } from 'react'
+import { gql, useMutation } from '@apollo/client'
+
+//Backendkoodi/mutaatio, jolla hoidetaan kirjan luonti backendiin
+//HUOM! nimetty mutaatio "createBook" ja siihen liittyvät muuttujat
+//Tällöin pystytään syöttämään frontendistä mikä tahansa arvo
+const ADD_BOOK = gql`
+mutation createBook($title: String!, $published: Int!, $author: String!,  $genres: [String]){
+  addBook(
+      title: $title,
+      published: $published,
+      author: $author,
+      genres: $genres
+  ) {
+      title,
+      author,
+      published,
+      genres
+  }
+}
+`
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('')
@@ -6,28 +26,52 @@ const NewBook = (props) => {
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
+  /*
+    console.log('Title', title)
+    console.log('Author', author)
+    console.log('Published', published)
+    console.log('Genre', genre)
+    console.log('Genres', genres)
+  */
+  //Mutaatioiden tekemiseen Hook-funktion "useMutation"
+  //HUOM! Käytä hakasulkujen sisällä mutaation nimeä "createBook" eikä "addBook"
+  //Hakasulkuihin siis mutaation nimi, koska syötettävät arvot ovat erejä ja graphQl
+  //vaatii muuttujia käytettäessä nimeämisen frontendissä
+  //Hook palauttaa kyselyfunktion taulukon ensimmäisenä alkiona
+  const [createBook] = useMutation(ADD_BOOK)
+
+  console.log('PUBLISHED TYPE', published)
+
 
   if (!props.show) {
     return null
   }
 
+
   const submit = async (event) => {
     event.preventDefault()
-    
-    console.log('add book...')
 
+    //Kyselyä tehtäessä määritellään kyselyn muuttujille arvot
+
+    createBook({ variables: { title, published, author, genres } })
+
+    console.log('add book...')
+    console.log('CREATE BOOK', createBook)
     setTitle('')
     setPublished('')
     setAuthor('')
     setGenres([])
     setGenre('')
+    console.log('TULIKO LOPPUN ASTI')
+   
   }
 
   const addGenre = () => {
     setGenres(genres.concat(genre))
     setGenre('')
   }
-
+//HUOM! Formi palauttaa String -tyyppisenä numerokentän (tässä "Published")
+//ellei käyttää pelkkää "target.value" eikä "target.valueAsNumber"
   return (
     <div>
       <form onSubmit={submit}>
@@ -50,7 +94,7 @@ const NewBook = (props) => {
           <input
             type='number'
             value={published}
-            onChange={({ target }) => setPublished(target.value)}
+            onChange={({ target }) => setPublished(target.valueAsNumber)}
           />
         </div>
         <div>

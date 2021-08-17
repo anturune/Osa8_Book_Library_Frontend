@@ -16,6 +16,8 @@ query {
 const Books = (props) => {
 
   //Tehdään haku backendiin
+  //PollInterval päivittää välimuistit 2sek välein
+  //const books = useQuery(ALL_BOOKS, { pollInterval: 2000 })
   const books = useQuery(ALL_BOOKS)
 
 
@@ -33,7 +35,7 @@ const Books = (props) => {
     return <div>loading...</div>
   }
 
-  console.log('ALL BOOKS', books.data.allBooks)
+  //console.log('ALL BOOKS', books.data.allBooks)
 
   return (
     <div>
