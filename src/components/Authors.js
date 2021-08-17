@@ -29,7 +29,11 @@ query {
 //const result = useQuery(ALL_AUTHORS)
 const Authors = (props) => {
   //console.log('TULIKO AUTHORS COMPONENTTIIN')
-  const authors = useQuery(ALL_AUTHORS)
+  //Pollaus 2sek välein eli hakee Authorit kannasta joka 2. sekunti
+  const authors = useQuery(ALL_AUTHORS, { pollInterval: 2000 })
+
+  //Ilman pollausta
+  //const authors = useQuery(ALL_AUTHORS)
   
   
   //Kun painetaan muuta kuin "authors" -nappia, niin propsina

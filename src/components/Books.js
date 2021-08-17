@@ -17,8 +17,9 @@ const Books = (props) => {
 
   //Tehdään haku backendiin
   //PollInterval päivittää välimuistit 2sek välein
-  //const books = useQuery(ALL_BOOKS, { pollInterval: 2000 })
-  const books = useQuery(ALL_BOOKS)
+  const books = useQuery(ALL_BOOKS, { pollInterval: 2000 })
+  //Jos ei halua pollausta, niin näin
+  //const books = useQuery(ALL_BOOKS)
 
 
   //Kun painetaan muuta kuin "books" -nappia, niin propsina
