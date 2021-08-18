@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
 import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client'
+//React-select ominaisuuden käyttöönotto
+//Mahdollistaa alasvetovalikon, jossa vain haluttu sisältö
+//Eikä tarvitse erikseen kirjoittaa vapaaseen kenttään
+//Tässä hyödynnetty henkilön syntymävuoden päivittämiseen
+import Select from 'react-select'
 
 /*
 //Tämä vain alkutestausta varten, kun testasin frontin ja backendin kommunikointia
@@ -22,6 +27,7 @@ query {
     name
     born
     bookCount
+    id
   }
 }
 `
@@ -33,6 +39,7 @@ mutation updateBirthYear ($name: String!, $born: Int!){
     setBornTo: $born) {
       name
       born
+      id
   }
 }
 `
@@ -49,7 +56,7 @@ const Authors = (props) => {
   //näkyvät reaaliajassa ilman sivun refreshausta
   const authors = useQuery(ALL_AUTHORS, { pollInterval: 2000 })
 
-
+  //console.log('ALL AUTHORS', authors.data.allAuthors)
   const [updateBirthYear] = useMutation(UPDATE_BIRTHYEAR)
   //Ilman pollausta
   //const authors = useQuery(ALL_AUTHORS)
@@ -60,6 +67,8 @@ const Authors = (props) => {
   if (!props.show) {
     return null
   }
+
+
 
   //Tämä oli alkuperäisessä koodissa, jotta renderöinti
   //onnistui tyhjällä arraylla ennen kyselyn lisäämistä koodiin ks. alla
@@ -85,8 +94,12 @@ const Authors = (props) => {
     setName('')
     setBorn('')
   }
+ 
+  console.log('NAME', name)
 
-
+  //Tämä koodi kun valintalista
+  //HUOM! Jotta valintalistaan jää valinnan jälkeen valittu nimi
+  //näkyviin, niin pitää "label":iin palauttaa "name" useStatesta
   return (
     <div>
       <h2>authors</h2>
@@ -96,10 +109,10 @@ const Authors = (props) => {
             <th></th>
             <th>
               born
-            </th>
+          </th>
             <th>
               books
-            </th>
+          </th>
           </tr>
           {authors.data.allAuthors.map(a =>
             <tr key={a.name}>
@@ -111,14 +124,14 @@ const Authors = (props) => {
         </tbody>
       </table>
 
-
       <h2>Set birthyear</h2>
       <form onSubmit={submit}>
         <div>
-          name <input
-            value={name}
-            onChange={({ target }) => setName(target.value)}
-          />
+          <Select
+            options={authors.data.allAuthors.map(author => ({ label: author.name, value: author.id }))}
+            onChange={({ label }) => setName(label)}
+            label={name}>
+          </Select>
         </div>
 
         <div>
@@ -134,4 +147,55 @@ const Authors = (props) => {
   )
 }
 
+/*
+//Tämä koodi kun käsin syötettävä kenttä
+return (
+  <div>
+    <h2>authors</h2>
+    <table>
+      <tbody>
+        <tr>
+          <th></th>
+          <th>
+            born
+          </th>
+          <th>
+            books
+          </th>
+        </tr>
+        {authors.data.allAuthors.map(a =>
+          <tr key={a.name}>
+            <td>{a.name}</td>
+            <td>{a.born}</td>
+            <td>{a.bookCount}</td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+
+
+    <h2>Set birthyear</h2>
+    <form onSubmit={submit}>
+      <div>
+        name <input
+          value={name}
+          onChange={({ target }) => setName(target.value)}
+        />
+      </div>
+
+      <div>
+        born <input
+          type='number'
+          value={born}
+          onChange={({ target }) => setBorn(target.valueAsNumber)}
+        />
+      </div>
+      <button type='submit'>update author</button>
+    </form>
+
+    
+  </div>
+)
+}
+*/
 export default Authors
