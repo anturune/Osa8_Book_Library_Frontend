@@ -28,6 +28,8 @@ const LoginForm = ({ props, setToken }) => {
   const [login, result] = useMutation(LOGIN)
 
   //Effect hooki käsittelemään tokenia
+  //efektihookki, jonka avulla asetetaan tokenin arvo komponentin App tilaan 
+  //sekä local storageen siinä vaiheessa kun palvelin on vastannut mutaatioon
   useEffect(() => {
     if (result.data) {
       const token = result.data.login.value

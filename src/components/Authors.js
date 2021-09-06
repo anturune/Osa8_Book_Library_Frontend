@@ -85,8 +85,8 @@ const Authors = (props) => {
   //Tämä koodi syntymävuoden päivittämiseen
   const submit = async (event) => {
     event.preventDefault()
-    console.log('NAME', name)
-    console.log('BORN', born)
+    //console.log('NAME', name)
+    //console.log('BORN', born)
     //HUOM! variabelit pitää olla samat kuin muuttuja "gql:ssä"
     //"mutation updateBirthYear ($name: String!, $born: Int!)"
     updateBirthYear({ variables: { name, born } })
@@ -95,7 +95,7 @@ const Authors = (props) => {
     setBorn('')
   }
  
-  console.log('NAME', name)
+  //console.log('NAME', name)
 
   //Tämä koodi kun valintalista
   //HUOM! Jotta valintalistaan jää valinnan jälkeen valittu nimi
