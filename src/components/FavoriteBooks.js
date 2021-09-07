@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { gql, useQuery, useLazyQuery, concat } from '@apollo/client'
+import { gql, useQuery, useLazyQuery } from '@apollo/client'
 
 //Haku backendiin "library-backend-Osa8"
 //author-kohtaa muutettu kun backendin skeema

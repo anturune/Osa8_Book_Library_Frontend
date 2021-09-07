@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client'
+import { gql, useQuery, useMutation } from '@apollo/client'
 //React-select ominaisuuden käyttöönotto
 //Mahdollistaa alasvetovalikon, jossa vain haluttu sisältö
 //Eikä tarvitse erikseen kirjoittaa vapaaseen kenttään

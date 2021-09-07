@@ -1,11 +1,23 @@
 
 import React, { useState, useEffect } from 'react'
-import { gql, useQuery, useLazyQuery, concat } from '@apollo/client'
+import { gql, useQuery, useLazyQuery} from '@apollo/client'
+
+//Fragmentti, jota voidaan hyödyntää kaikissa
+//kyselyissä
+const BOOK_DETAILS = gql`
+fragment BookDetails on Book{
+  title
+      author{name}
+      published
+      genres
+  }
+`
 
 //Haku backendiin "library-backend-Osa8"
 //author-kohtaa muutettu kun backendin skeema
 //muutettu siten, että Book -olion author kenttä on "author:Author!"
 //ja Book oliossa viitataan Authoriin vain ID:llä (ks. backend ja Book author: resolveri)
+/*
 const ALL_BOOKS = gql`
 query {
   allBooks { 
@@ -14,8 +26,9 @@ query {
       published
       genres
   }
-}
-`
+}`
+*/
+/*
 const ALL_BOOKS_BY_TAG = gql`
 query allBooksByTag($genre:String!){
   allBooks (genre:$genre){ 
@@ -26,6 +39,26 @@ query allBooksByTag($genre:String!){
   }
 }
 `
+*/
+//All books -haku yksinkertaistuu fragmentin avulla
+const ALL_BOOKS = gql`
+  {
+    allBooks { 
+      ...BookDetails
+  }
+}
+  ${BOOK_DETAILS}  
+`
+//All books by tag -haku yksinkertaistuu fragmentin avulla
+const ALL_BOOKS_BY_TAG = gql`
+query allBooksByTag($genre:String!){
+  allBooks (genre:$genre){ 
+      ...BookDetails
+  }
+}
+${BOOK_DETAILS}
+`
+
 
 
 const Books = (props) => {
@@ -62,7 +95,7 @@ const Books = (props) => {
   }, [result])
 
 
-  console.log('GENREBOOKS', genreBooks)
+  //console.log('GENREBOOKS', genreBooks)
 
 
   //Kun painetaan muuta kuin "books" -nappia, niin propsina

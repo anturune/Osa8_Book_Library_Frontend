@@ -33,9 +33,7 @@ const httpLink = new HttpLink({ uri: 'http://localhost:4000' })
 //sovelluksella tulee nyt olla HTTP-yhteyden lisäksi websocket-yhteys GraphQL-palvelimelle
 const wsLink = new WebSocketLink({
     uri: 'ws://localhost:4000/graphql',
-    options: {
-        reconnect: true
-    }
+    options: { reconnect: true }
 })
 //Sovelluksella tulee nyt olla HTTP-yhteyden lisäksi websocket-yhteys GraphQL-palvelimelle
 //"wsLink" ja "httpLink"

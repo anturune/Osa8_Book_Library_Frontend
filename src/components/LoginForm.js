@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { gql, useQuery, useMutation, useLazyQuery } from '@apollo/client'
+import { gql, useMutation } from '@apollo/client'
 //import { LOGIN } from '../queries'
 
 //Backendiin kysely loggautumiseen
