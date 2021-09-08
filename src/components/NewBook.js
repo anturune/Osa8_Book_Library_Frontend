@@ -40,7 +40,7 @@ const NewBook = (props) => {
   //Hook palauttaa kyselyfunktion taulukon ensimmäisenä alkiona
   const [createBook] = useMutation(ADD_BOOK)
 
-  console.log('PUBLISHED TYPE', published)
+  //console.log('PUBLISHED TYPE', published)
 
 
   if (!props.show) {

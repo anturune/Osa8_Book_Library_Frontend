@@ -15,6 +15,7 @@ query {
   }
 }
 `
+//Haetaan genren kirjat
 const ALL_BOOKS_BY_FAVORITE_TAG = gql`
 query allBooksByTag($genre:String!){
   allBooks (genre:$genre){ 
@@ -25,6 +26,8 @@ query allBooksByTag($genre:String!){
   }
 }
 `
+//Haetaan kirjautunut käyttäjä joka sisältää
+//suosikkigenren
 const ME = gql`
 query {
   me{

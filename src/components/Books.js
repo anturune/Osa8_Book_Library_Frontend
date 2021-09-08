@@ -10,6 +10,7 @@ fragment BookDetails on Book{
       author{name}
       published
       genres
+      id
   }
 `
 
@@ -65,7 +66,7 @@ const Books = (props) => {
 
   //Tehdään haku backendiin
   //PollInterval päivittää välimuistit 2sek välein
-  const books = useQuery(ALL_BOOKS, { pollInterval: 2000 })
+  const books = useQuery(ALL_BOOKS, { pollInterval: 200 })
 
   //Jos ei halua pollausta, niin näin
   //const books = useQuery(ALL_BOOKS)
@@ -94,17 +95,11 @@ const Books = (props) => {
     }
   }, [result])
 
-
-  //console.log('GENREBOOKS', genreBooks)
-
-
   //Kun painetaan muuta kuin "books" -nappia, niin propsina
   //tulee null ja silloin kirjoja ei renderöidä
   if (!props.show) {
     return null
   }
-
-
 
   //Tämä tarvitaan, jos vastausta ei saatu palvelimelta
   //näyttäisi, että tarvitaan aina, koska muuten ei renderöinyt HTML sivulle

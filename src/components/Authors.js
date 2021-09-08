@@ -21,6 +21,7 @@ const Authors = ({ authors }) => {
   )
 }
 */
+//Kaikkien authoreiden hakemiseen
 const ALL_AUTHORS = gql`
 query {
   allAuthors {
@@ -43,9 +44,6 @@ mutation updateBirthYear ($name: String!, $born: Int!){
   }
 }
 `
-
-
-//const result = useQuery(ALL_AUTHORS)
 const Authors = (props) => {
 
   const [name, setName] = useState('')
@@ -94,7 +92,7 @@ const Authors = (props) => {
     setName('')
     setBorn('')
   }
- 
+
   //console.log('NAME', name)
 
   //Tämä koodi kun valintalista
@@ -109,10 +107,10 @@ const Authors = (props) => {
             <th></th>
             <th>
               born
-          </th>
+            </th>
             <th>
               books
-          </th>
+            </th>
           </tr>
           {authors.data.allAuthors.map(a =>
             <tr key={a.name}>

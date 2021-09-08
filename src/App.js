@@ -6,7 +6,7 @@ import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import FavoriteBooks from './components/FavoriteBooks'
 //Apollo client sekä Subscription myös määritellään "index.js" -sivulla
-import { useApolloClient, useSubscription, gql } from '@apollo/client'
+import { useApolloClient, useSubscription, gql, useQuery } from '@apollo/client'
 
 /*
 //Tämä kysely luotu, jotta voidaan todeta, että kysely backendiin toimii
@@ -25,10 +25,11 @@ query {
 //halutuissa kyselyissä
 const BOOK_DETAILS = gql`
 fragment BookDetails on Book{
-  title
+      title
       author{name}
       published
       genres
+      id
   }
 `
 //Subscription kysely
@@ -41,6 +42,15 @@ const BOOK_ADDED = gql`
   
 ${BOOK_DETAILS}
 `
+//Kaikki kirjat, jotta voidaan päivittää väälimuistia
+const ALL_BOOKSIT = gql`
+  {
+    allBooks { 
+      ...BookDetails
+  }
+}
+  ${BOOK_DETAILS}  
+`
 
 //Loggautumista varten Notificaatio -komponentti
 const Notify = ({ notifyMessage }) => {
@@ -49,7 +59,7 @@ const Notify = ({ notifyMessage }) => {
   }
   return (
     <div style={{ color: 'green' }}>
-      {window.alert(notifyMessage)}
+      {notifyMessage}
     </div>
   )
 }
@@ -61,11 +71,13 @@ const App = () => {
   const [page, setPage] = useState('authors')
   //Kirjautumiseen liittyvä yksilöllinen Token
   const [token, setToken] = useState(null)
-  const client = useApolloClient()
   const [notifyMessage, setNotifyMessage] = useState(null)
+  const client = useApolloClient()
 
   const tokenLocalStoragessa = localStorage.getItem('library-user-token')
-
+  //Tämä haku pitää olla täällä, jotta saadaan cachet päivittymään
+  //jokaisen renderöinnin yhteydessä haetaan kirjat
+  const books = useQuery(ALL_BOOKSIT)
 
   //console.log('TOKENI APP:ssa tokenLocalStoragessa', tokenLocalStoragessa)
   //console.log('TOKENI APP:ssa UseStatessa', token)
@@ -113,25 +125,41 @@ const App = () => {
     )
   */
   //-----------------------BACKEND-FRONTEND KOMMUNIKOINTI-TESTAAMISTA VARTEN----------------------------
+  //Cachejen päivittämiseen, kun uusi kirja luodaan
+  const updateCacheWith = (addedBook) => {
+    const includedIn = (set, object) => set.map(b => b.id).includes(object.id)
+    //Haetaan data välimuistista
+    const dataInStore = client.readQuery({ query: ALL_BOOKSIT })
+    //Tsekataan onko kirja cacheissa ja jos ei ole, niin lisätään
+    if (!includedIn(dataInStore.allBooks, addedBook)) {
+      client.writeQuery({
+        query: ALL_BOOKSIT,
+        data: { allBooks: dataInStore.allBooks.concat(addedBook) }
+      })
+    }
+  }
 
-  //Notifiacaatio 10 sek.
   const notify = (message) => {
     setNotifyMessage(message)
     setTimeout(() => {
       setNotifyMessage(null)
-    }, 10000)
+    }, 5000)
   }
+
   //Subscriptio eli aina kun uusi kirja lisätään tulee notificaatio
   //tässä hyödynnetään webSocketteja HTTP:n sijaan
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
       const addedBook = subscriptionData.data.bookAdded
       notify(`${addedBook.title} added`)
+      //Cachien päivittämiseen
+      updateCacheWith(addedBook)
       console.log(subscriptionData)
       console.log('TULIKO SUBSCRIPTIONIIN??')
 
     }
   })
+
 
   //Logout napin toiminnot
   //Välimuistin nollaaminen tapahtuu Apollon client-objektin metodilla resetStore,

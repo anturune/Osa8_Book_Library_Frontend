@@ -46,7 +46,6 @@ const LoginForm = ({ props, setToken }) => {
     return null
   }
 */
-  //console.log('TOKENI', token)
 
   //Usernamen ja passwordin lähettäminen backendiin
   const submit = async (event) => {
